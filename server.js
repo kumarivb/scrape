@@ -7,6 +7,9 @@ var bodyParser = require("body-parser");
 var cheerio = require("cheerio");
 var request = require("request");
 
+// Require all models
+var db = require("./models");
+
 // Initialize Express
 var app = express();
 
@@ -26,5 +29,41 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Connect to the Mongo DB
 mongoose.Promise = Promise;
 mongoose.connect("mongodb://localhost/feed", {
-    useMongoClient: true
+    // useMongoClient: true
+});
+
+// ROUTES
+// get
+app.get("/scrape", function(req, res) {
+    // Make a request to grab HTML body from site
+    request("https://www.boredpanda.com/", function(err, response, html) {
+        // Load the HTML into cheerio and save it to a variable
+        // '$' becomes a shorthand for cheerio's selector commands, much like jQuery's '$'
+        var $ = cheerio.load(html);
+
+        // An empty array to save the data that we'll scrape
+        var results = [];
+
+        // select elements
+        $("article h2").each(function(i, element) {
+
+            // add text href and summary
+            result.title = $(this)
+                .children("a")
+                .text();
+            result.link = $(this)
+                .children("a")
+                .attr("href");
+            result.desc = $(this)
+                .children("description")
+                .text();
+        });
+    });
+    console.log(results);
+});
+
+var PORT = process.env.PORT || 3000;
+// Start the server
+app.listen(PORT, function() {
+    console.log("App running on port " + PORT + "!");
 });

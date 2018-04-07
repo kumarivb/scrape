@@ -33,7 +33,7 @@ mongoose.Promise = Promise;
 mongoose.connect(MONGODB_URI);
 
 // ROUTES
-// var routes = require("./routes");
+// var routes = require("./routes/api");
 // app.use(routes);
 
 var PORT = process.env.PORT || 3000;
